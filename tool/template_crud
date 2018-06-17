@@ -1,0 +1,59 @@
+type UserChipRepository struct {
+	db *gorm.DB
+}
+
+func (n UserChip) in(i *domain.UserChip) UserChip {
+	r := UserChip{}
+	CopyFrom(&r, i)
+	return r
+}
+
+func (r UserChip) out() *domain.UserChip {
+	i := &domain.UserChip{}
+	CopyTo(&r, i)
+	return i
+}
+
+func (repo *UserChipRepository) create(chip UserChip) (UserChip, error) {
+	err := repo.db.Create(&chip).Error
+	return chip, err
+}
+
+func (repo *UserChipRepository) Create(u *domain.UserChip) (*domain.UserChip, error) {
+	chip := UserChip{}.in(u)
+	chip, err := repo.create(chip)
+	return chip.out(), err
+}
+
+func (repo *UserChipRepository) update(chipOld UserChip, chipNext UserChip) (UserChip, error) {
+	err := repo.db.Model(&chipOld).Update(&chipNext).Error
+	return chipNext, err
+}
+
+func (repo *UserChipRepository) Update(uOld *domain.UserChip, uNext *domain.UserChip) (*domain.UserChip, error) {
+	chipOld := UserChip{}.in(uOld)
+	chipNext := UserChip{}.in(uNext)
+
+	chip, err := repo.update(chipOld, chipNext)
+	return chip.out(), err
+}
+
+func (repo *UserChipRepository) get(chip UserChip) (UserChip, bool) {
+	notFound := repo.db.First(&chip).RecordNotFound()
+	return chip, !notFound
+}
+
+func (repo *UserChipRepository) Get(u *domain.UserChip) (*domain.UserChip, bool) {
+	chip := UserChip{}.in(u)
+	chip, exist := repo.get(chip)
+	return chip.out(), exist
+}
+
+func (repo *UserChipRepository) delete(chip UserChip) {
+	repo.db.Delete(&chip)
+}
+
+func (repo *UserChipRepository) Delete(u *domain.UserChip) {
+	chip := UserChip{}.in(u)
+	repo.delete(chip)
+}

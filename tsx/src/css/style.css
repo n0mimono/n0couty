@@ -1,0 +1,95 @@
+/* ---------------------------------------- */
+
+.test {
+    color: blue;
+}
+
+.test2 {
+    border-radius: 0px;
+    background-image: initial;
+    background-color: #333333;
+}
+
+/* ---------------------------------------- */
+
+.block {
+    padding: 10px 0px 40px 0px;
+}
+
+/* ---------------------------------------- */
+
+.centerjust {
+    display: flex;
+    justify-content: center;
+}
+
+.leftjust {
+    display: flex;
+    flex: auto;
+}
+
+.rightjust {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.addflex {
+    display: flex;
+}
+
+/* ---------------------------------------- */
+
+.cnavbarpad {
+    padding: 70px 0px 0px 0px
+}
+
+.cnavleft {
+    padding: 70px 0px 0px 0px
+    /*
+        position: fixed;
+        top: 70px;
+        z-index: 9999;
+    */
+}
+
+/* ---------------------------------------- */
+
+.cbtnblock {
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* ---------------------------------------- */
+
+.userlistsubheader {
+    font-size: 24px;
+}
+
+.userlistsub {
+    padding: 10px 0px 10px 0px;
+}
+
+.userlistsubline {
+    height: 1px;
+    border: none;
+    border-top: 1px #f3f3f3 solid;
+}
+
+.usrlistpageitem {
+    text-align: center;
+    width: 60px; 
+}
+
+.usrlistpageblock {
+    display: flex;
+    justify-content: center;
+    padding: 5px 0px 20px 0px;
+}
+
+/* ---------------------------------------- */
+
+.userpageitemheader {
+    font-size: 20px;
+}
+
+/* ---------------------------------------- */
