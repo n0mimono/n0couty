@@ -6,8 +6,6 @@ AIベースのスカウト支援アプリ（仮、WIP）
 
 https://github.com/n0mimono/n0couty/wiki
 
----
-
 # Setup / Start
 
 ## 環境変数
