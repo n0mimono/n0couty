@@ -620,6 +620,18 @@ export const StatsSummary: React.SFC<StatsSummaryProps> = (props) => {
         return { ...corr[key], key: key }
     })
 
+    let socialSums = summary.social_sums
+    let socialCorr = summary.social_corr
+
+    let socialBar = [
+        ...Object.keys(socialSums).map(key => {
+            return { key: key, count: socialSums[key] }
+        })
+    ]
+    let socialLine = Object.keys(socialCorr).map(key => {
+        return { ...socialCorr[key], key: key }
+    })
+
     return (
         <div>
             {/*
@@ -638,7 +650,7 @@ export const StatsSummary: React.SFC<StatsSummaryProps> = (props) => {
                 <XAxis dataKey="key" /> <YAxis /> <Tooltip /> <Legend />
                 <Bar dataKey="count" fill="#88D" />
             </BarChart>
-            <LineChart width={700} height={500} data={lineData} margin={{ top: 40, right: 20, left: 20, bottom: 5 }}>
+            <LineChart width={700} height={500} data={lineData} margin={{ top: 40, right: 20, left: 20, bottom: 80 }}>
                 <XAxis dataKey="key" /> <YAxis /> <Tooltip /> <Legend /> <CartesianGrid strokeDasharray="3 3" />
                 <Line type="monotone" dataKey="name" stroke="#88D" activeDot={{ r: 8 }} />
                 <Line type="monotone" dataKey="description" stroke="#8D8" activeDot={{ r: 8 }} />
@@ -648,6 +660,19 @@ export const StatsSummary: React.SFC<StatsSummaryProps> = (props) => {
                 <Line type="monotone" dataKey="contributions" stroke="#C76" activeDot={{ r: 8 }} />
                 <Line type="monotone" dataKey="followers" stroke="#67C" activeDot={{ r: 8 }} />
                 <Line type="monotone" dataKey="followees" stroke="#888" activeDot={{ r: 8 }} />
+            </LineChart>
+
+            <BarChart width={700} height={300} data={socialBar} margin={{ top: 10, right: 20, left: 20, bottom: 5 }}>
+                <XAxis dataKey="key" /> <YAxis /> <Tooltip /> <Legend />
+                <Bar dataKey="count" fill="#88D" />
+            </BarChart>
+            <LineChart width={700} height={500} data={socialLine} margin={{ top: 40, right: 20, left: 20, bottom: 80 }}>
+                <XAxis dataKey="key" /> <YAxis /> <Tooltip /> <Legend /> <CartesianGrid strokeDasharray="3 3" />
+                <Line type="monotone" dataKey="github" stroke="#88D" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="twitter" stroke="#8D8" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="facebook" stroke="#D88" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="linkedin" stroke="#DD8" activeDot={{ r: 8 }} />
+                <Line type="monotone" dataKey="google" stroke="#D8D" activeDot={{ r: 8 }} />
             </LineChart>
         </div>
     )

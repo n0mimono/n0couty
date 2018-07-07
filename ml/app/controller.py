@@ -24,6 +24,8 @@ class Controller():
             'total': self.summary_total,
             'sums': self.summary_sums.to_dict(),
             'corr': self.summary_corr.to_dict(),
+            'social_sums': self.summary_social_sums.to_dict(),
+            'social_corr': self.summary_social_corr.to_dict(),
         })
 
     def summary_calc(self):
@@ -53,10 +55,21 @@ class Controller():
         ] > 0
         df_b = df_b_users.join(df_b_stas)
 
+        # social stats
+        sql = self.db.sql_table_all('user_social_links')
+        df_social = pandas.read_sql(sql, self.db.conn)
+
+        social_dummies = pandas.get_dummies(df_social['service_id'])
+        social_dummies.columns = ['github', 'twitter', 'facebook', 'linkedin', 'google']
+        df_social = df_social[['user_id']].join(social_dummies)
+        df_social_stats = df_social.groupby('user_id').max()
+
         # unsafe...
         self.summary_total = len(df)
         self.summary_sums = df_b.sum()
         self.summary_corr = df_b.corr()
+        self.summary_social_sums = df_social_stats.sum()
+        self.summary_social_corr = df_social_stats.corr()
 
     def word_get(self) -> str:
         return json.dumps({
