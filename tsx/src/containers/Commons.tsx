@@ -40,7 +40,7 @@ export const Navigator: React.SFC<{}> = (props) => {
                     <Col xs={2}>
                         <ConnectedLeftMenu />
                     </Col>
-                    <Col xs={10} className={styles.cnavbarpad}>
+                    <Col xs={10} className={styles.navTop}>
                         {props.children}
                     </Col>
                 </Row>
@@ -67,7 +67,7 @@ const LeftMenu: React.SFC<Common.PageProps & Common.CrawlerState> = (props) => {
     let label = props.cs.run ? "success" : "primary"
 
     return (
-        <Nav bsStyle="pills" stacked activeKey={key} className={styles.cnavleft}
+        <Nav bsStyle="pills" stacked activeKey={key} className={styles.navLeft}
             onSelect={e => props.move(Common.PathIndeces[Number(e)])}>
             <NavItem eventKey={0}>
                 Home
@@ -175,9 +175,11 @@ export const Block: React.SFC<{}> = (props) => {
 
 export const Loading: React.SFC<{}> = (props) => {
     return (
-        <div className={styles.centerjust}>
-            <div>
-                <img src="/assets/Loading_icon.gif" width="200px" />
+        <div className={styles.loading}>
+            <div className={styles.panel}>
+                <div className={styles.dot1}></div>
+                <div className={styles.dot2}></div>
+                <div className={styles.dot3}></div>
             </div>
         </div>
     )
@@ -188,18 +190,26 @@ interface SocialLinkLogoImgProps {
 }
 
 export const SocialLinkLogoImg: React.SFC<SocialLinkLogoImgProps> = (props) => {
-    let imgs = [
-        { src: '', width: 0 },
-        { src: 'logo_github.png', width: 25 },
-        { src: 'logo_twitter.svg', width: 25 },
-        { src: 'logo_facebook.svg', width: 25 },
-        { src: 'logo_linkedin.png', width: 25 },
-        { src: 'logo_gplus.png', width: 25 },
+    let htmls = [
+        <i></i>,
+        <i className="fab fa-2x fa-github-square"></i>,
+        <i className="fab fa-2x fa-twitter-square"></i>,
+        <i className="fab fa-2x fa-facebook-square"></i>,
+        <i className="fab fa-2x fa-linkedin"></i>,
+        <i className="fab fa-2x fa-google-plus-square"></i>
     ]
-    let src = imgs[props.serviceId].src
-    let width = imgs[props.serviceId].width
+    let colors = [
+        '#000000',
+        '#171515',
+        '#2AA3F0',
+        '#4469B0',
+        '#127BB4',
+        '#DC524A',
+    ]
     return (
-        <img src={"/assets/" + src} width={width} />
+        <span style={{ color: colors[props.serviceId], padding:'1px' }}>
+            {htmls[props.serviceId]}
+        </span>
     )
 }
 
@@ -222,9 +232,9 @@ export const CrawlProgress: React.SFC<ProgressProps> = (props) => {
     let hours = Math.round(secs / 60 / 60)
 
     return (
-        <div>
-            <div className={styles.addflex}>
-                <div className={styles.leftjust}>
+        <div className={styles.crawlProgress}>>
+            <div className={styles.panel}>
+                <div className={styles.left}>
                     <div>
                         {
                             props.active ? "データを更新しています... (" + props.now + "/" + props.max + ")" :
@@ -232,7 +242,7 @@ export const CrawlProgress: React.SFC<ProgressProps> = (props) => {
                         }
                     </div>
                 </div>
-                <div className={styles.rightjust}>
+                <div className={styles.right}>
                     <div>
                         推定残り時間: {hours} 時間
                     </div>
@@ -253,7 +263,7 @@ interface OnOffButtonProps {
 
 export const CrawlButton: React.SFC<OnOffButtonProps> = (props) => {
     return (
-        <div className={styles.rightjust}>
+        <div className={styles.crawlBtn}>
             <Button bsStyle="danger" disabled={props.isLoading} onClick={_ => props.onClick()}>
                 {props.isStop ? "クロール開始" : "クロール停止"}
             </Button>
@@ -347,9 +357,9 @@ export const UserPage: React.SFC<UserPageProps> = (props) => {
     let scout = props.user.scout
 
     return (
-        <Grid>
-            <Row className={styles.userlistsub}>
-                <Col xs={5} className={styles.userlistsubheader}>
+        <Grid className={styles.userPage}>
+            <Row className={styles.lot}>
+                <Col xs={4} className={styles.header}>
                     {user.name}
                 </Col>
                 <Col xs={1}>
@@ -361,7 +371,7 @@ export const UserPage: React.SFC<UserPageProps> = (props) => {
                             <Glyphicon glyph="warning-sign" /> BAN
                         </Col>
                 }
-                <Col xs={1}>
+                <Col xs={2}>
                     {links.map((l, i) =>
                         <a key={i} href={l.url} target="_blank"><SocialLinkLogoImg serviceId={l.serviceId} /></a>
                     )}
@@ -379,9 +389,9 @@ export const UserPage: React.SFC<UserPageProps> = (props) => {
                 </Col>
             </Row>
             <Row>
-                <Col xs={9} className={styles.userlistsubline} />
+                <Col xs={9} className={styles.line} />
             </Row>
-            <Row className={styles.userlistsub}>
+            <Row className={styles.lot}>
                 <Col xs={3} xsPull={0}>
                     <Glyphicon glyph="user" /> <a href={"https://qiita.com/" + user.qiitaId} target="_blank">{user.qiitaId}</a>
                 </Col>
@@ -392,7 +402,7 @@ export const UserPage: React.SFC<UserPageProps> = (props) => {
                     <Glyphicon glyph="link" />  <a href={user.link} target="_blank"> {user.link} </a>
                 </Col>
             </Row>
-            <Row className={styles.userlistsub}>
+            <Row className={styles.lot}>
                 <Col xs={3} xsPull={0}>
                     <Glyphicon glyph="oil" /> {user.organization}
                 </Col>
@@ -403,15 +413,15 @@ export const UserPage: React.SFC<UserPageProps> = (props) => {
                     <Glyphicon glyph="grain" /> {user.qiitaOrganization}
                 </Col>
             </Row>
-            <Row className={styles.userlistsub}>
+            <Row className={styles.lot}>
                 <Col xs={9}>
                     <Glyphicon glyph="comment" /> {user.description}
                 </Col>
             </Row>
             <Row>
-                <Col xs={9} className={styles.userlistsubline} />
+                <Col xs={9} className={styles.line} />
             </Row>
-            <Row className={styles.userlistsub}>
+            <Row className={styles.lot}>
                 <Col xs={3}>
                     <Glyphicon glyph="arrow-up" /> 投稿 <Badge>{stat.items}</Badge>
                 </Col>
@@ -426,9 +436,9 @@ export const UserPage: React.SFC<UserPageProps> = (props) => {
                 </Col>
             </Row>
             <Row>
-                <Col xs={9} className={styles.userlistsubline} />
+                <Col xs={9} className={styles.line} />
             </Row>
-            <Row className={styles.userlistsub}>
+            <Row className={styles.lot}>
                 <Col>
                     {langs.map((l, i) => <Badge key={i}>{l.name} {l.quantity}</Badge>)}
                 </Col>
@@ -473,14 +483,14 @@ export const UserListPage: React.SFC<UserListPageProps> = (props) => {
     let next = props.next == "0" ? "" : "> " + props.next
 
     return (
-        <div className={styles.usrlistpageblock}>
-            <div className={styles.usrlistpageitem}>
+        <div className={styles.userPager}>
+            <div className={styles.item}>
                 <a href="#" onClick={() => props.onNext(props.prev)}> {prev} </a>
             </div>
-            <div className={styles.usrlistpageitem}>
+            <div className={styles.item}>
                 {props.page}
             </div>
-            <div className={styles.usrlistpageitem}>
+            <div className={styles.item}>
                 <a href="#" onClick={() => props.onNext(props.next)}> {next} </a>
             </div>
         </div>
@@ -555,19 +565,19 @@ interface UserPageItemsUnitProps {
 const UserPageItemsUnit: React.SFC<UserPageItemsUnitProps> = (props) => {
     let item = props.item
     return (
-        <Grid>
-            <Row className={styles.userlistsub}>
-                <Col xs={9} className={styles.userpageitemheader}>
+        <Grid className={styles.userPage}>
+            <Row className={styles.lot}>
+                <Col xs={9} className={styles.header2}>
                     <a href={"https://qiita.com/" + props.qiitaId + "/items/" + item.body.articleId} target="_blank"> {item.body.title} </a>
                 </Col>
             </Row>
             <Row>
-                <Col xs={9} className={styles.userlistsubline} />
+                <Col xs={9} className={styles.line} />
             </Row>
             <Row>
-                <Col xs={9} className={styles.userlistsubline} />
+                <Col xs={9} className={styles.line} />
             </Row>
-            <Row className={styles.userlistsub}>
+            <Row className={styles.lot}>
                 <Col xs={3} xsPull={0}>
                     <Glyphicon glyph="thumbs-up" /> いいね <Badge>{item.body.contributions}</Badge>
                 </Col>
@@ -579,9 +589,9 @@ const UserPageItemsUnit: React.SFC<UserPageItemsUnitProps> = (props) => {
                 </Col>
             </Row>
             <Row>
-                <Col xs={9} className={styles.userlistsubline} />
+                <Col xs={9} className={styles.line} />
             </Row>
-            <Row className={styles.userlistsub}>
+            <Row className={styles.lot}>
                 <Col>
                     {item.tags.map((t, i) => <Badge key={i}>{t.name}</Badge>)}
                 </Col>
@@ -634,18 +644,6 @@ export const StatsSummary: React.SFC<StatsSummaryProps> = (props) => {
 
     return (
         <div>
-            {/*
-            <Grid>
-                <Row className={styles.userlistsub}>
-                    <Col xsOffset={7} xs={1} className={styles.userpageitemheader}>
-                        <Button bsStyle="warning" disabled={props.isLoading} onClick={_ => props.onUpdate()}>
-                            再計算する
-                        </Button>
-                    </Col>
-                </Row>
-            </Grid>
-            */}
-
             <BarChart width={700} height={300} data={barData} margin={{ top: 10, right: 20, left: 20, bottom: 5 }}>
                 <XAxis dataKey="key" /> <YAxis /> <Tooltip /> <Legend />
                 <Bar dataKey="count" fill="#88D" />

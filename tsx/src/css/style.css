@@ -1,95 +1,121 @@
 /* ---------------------------------------- */
 
-.test {
-    color: blue;
-}
-
-.test2 {
-    border-radius: 0px;
-    background-image: initial;
-    background-color: #333333;
-}
-
-/* ---------------------------------------- */
-
 .block {
     padding: 10px 0px 40px 0px;
 }
 
-/* ---------------------------------------- */
-
-.centerjust {
+.loading {
     display: flex;
     justify-content: center;
 }
 
-.leftjust {
+.loading .panel {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading .dot1 {
+    margin: 3px;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    animation: dot 1s ease 0000ms infinite alternate;
+}
+
+.loading .dot2 {
+    margin: 3px;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    animation: dot 1s ease 0333ms infinite alternate;
+}
+
+.loading .dot3 {
+    margin: 3px;
+    width: 15px;
+    height: 15px;
+    border-radius: 100%;
+    animation: dot 1s ease 0667ms infinite alternate;
+}
+
+@keyframes dot {
+	0% {
+        background-color: #333;
+    }
+	100% {
+        background-color: #FFF;
+    }
+}
+
+/* ---------------------------------------- */
+
+.navTop {
+    padding: 70px 0px 0px 0px
+}
+
+.navLeft {
+    padding: 70px 0px 0px 0px
+}
+
+/* ---------------------------------------- */
+
+.crawlProgress {
+}
+
+.crawlProgress .panel {
+    display: flex;
+}
+
+.crawlProgress .left {
     display: flex;
     flex: auto;
 }
 
-.rightjust {
+.crawlProgress .right {
     display: flex;
     justify-content: flex-end;
 }
 
-.addflex {
-    display: flex;
-}
-
-/* ---------------------------------------- */
-
-.cnavbarpad {
-    padding: 70px 0px 0px 0px
-}
-
-.cnavleft {
-    padding: 70px 0px 0px 0px
-    /*
-        position: fixed;
-        top: 70px;
-        z-index: 9999;
-    */
-}
-
-/* ---------------------------------------- */
-
-.cbtnblock {
+.crawlBtn {
     display: flex;
     justify-content: flex-end;
 }
 
 /* ---------------------------------------- */
 
-.userlistsubheader {
-    font-size: 24px;
+.userPage {
 }
 
-.userlistsub {
+.userPage .lot {
     padding: 10px 0px 10px 0px;
 }
 
-.userlistsubline {
+.userPage .lot .header {
+    font-size: 24px;
+}
+
+.userPage .lot .header2 {
+    font-size: 20px;
+}
+
+.userPage .line {
     height: 1px;
     border: none;
     border-top: 1px #f3f3f3 solid;
 }
 
-.usrlistpageitem {
-    text-align: center;
-    width: 60px; 
-}
-
-.usrlistpageblock {
+.userPager {
     display: flex;
     justify-content: center;
     padding: 5px 0px 20px 0px;
 }
 
-/* ---------------------------------------- */
-
-.userpageitemheader {
-    font-size: 20px;
+.userPager .item {
+    text-align: center;
+    width: 60px; 
 }
 
 /* ---------------------------------------- */
