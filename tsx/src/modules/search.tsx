@@ -6,6 +6,11 @@ import * as Common from './common'
 
 // constants
 
+export interface SearchQuery {
+    doc: string
+    simple: boolean
+}
+
 interface ScoredUser {
     id: number
     score: number
@@ -19,13 +24,11 @@ export const actions = {
     updateUserList: actionCreator<ScoredUser[]>('SEARCH_UPDATE_USER_LIST'),
     updateLoading: actionCreator<boolean>('SEARCH_UPDATE_LOADING'),
     updateSummary: actionCreator<UserSummary[]>('SEARCH_UPDATE_SUMMARY'),
-    updateFormValue: actionCreator<string>('SEARCH_UPDATE_FORM_VALUE'),
 }
 
 export interface Actions {
     init: () => Action<undefined>
-    getUserList: (query: string) => Action<string>
-    onFormChange: (query: string) => Action<string>
+    getUserList: (query: SearchQuery) => Action<string>
 }
 
 // states
@@ -33,14 +36,12 @@ export interface State {
     isLoading: boolean
     userList: ScoredUser[]
     users: UserSummary[]
-    formValue: string
 }
 
 const initState: State = {
     isLoading: false,
     userList: [],
     users: [],
-    formValue: "",
 }
 
 // reducers
@@ -66,12 +67,6 @@ export const Reducer = reducerWithInitialState(initState)
         return {
             ...state,
             users: [ ...users ],
-        }
-    })
-    .case(actions.updateFormValue, (state, value) => {
-        return {
-            ...state,
-            formValue: value,
         }
     })
     .case(Common.scoutActions.starChange, (state, check) => {

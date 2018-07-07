@@ -127,39 +127,50 @@ class Controller():
             'queries': queries
         })
     
+    def word_similarity_users_get_simple(self, queries, max_num) -> str:
+        # calculator
+        sql = self.db.sql_lang_counts(queries)
+        df_lang = pandas.read_sql(sql, self.db.conn)
+        df_lang.columns = ['id', 'count']
+
+        sql = self.db.sql_user_counts(queries)
+        df_user = pandas.read_sql(sql, self.db.conn)
+        df_user.columns = ['id', 'count']
+
+        df_counts = pandas.concat([df_lang, df_user])
+
+        num = len(df_counts) if len(df_counts) < max_num else max_num
+        df_counts_top = df_counts[:num]
+
+        # output
+        similars = [{
+            'user_id': int(df_counts_top['id'][i]),
+            'score': int(df_counts_top['count'][i])
+            } for i in range(num)
+        ]
+
+        return json.dumps({
+            'similars': similars,
+            'queries': queries
+        })
+
     def word_calc(self):
         print('word_calc: df')
         # data frame
         sql = self.db.sql_table_all('users')
         df_users = pandas.read_sql(sql, self.db.conn)
-        sql = self.db.sql_table_all('user_stats')
-        df_stats = pandas.read_sql(sql, self.db.conn)
         sql = self.db.sql_table_all('user_language_stats')
         df_langs = pandas.read_sql(sql, self.db.conn)
-
-        def tag(series, name):
-            return name+':on' if series[name] else name+':off'
         
         # data reconstruct
+        # todo: use sparse matrix
         print('word_calc: rc')
         lang_map = defaultdict(list)
         for i, series in df_users.iterrows():
             user_id = int(series['id'])
             lang_map[user_id].append(str(series['qiita_id']))
-            lang_map[user_id].append(tag(series, 'name'))
-            lang_map[user_id].append(tag(series, 'description'))
-            lang_map[user_id].append(tag(series, 'mail'))
-            lang_map[user_id].append(tag(series, 'link'))
-            lang_map[user_id].append(tag(series, 'organization'))
-            lang_map[user_id].append(tag(series, 'place'))
-            lang_map[user_id].append(tag(series, 'qiita_organization'))
-            lang_map[user_id].append(tag(series, 'ban'))
-        for i, series in df_stats.iterrows():
-            user_id = int(series['id'])
-            lang_map[user_id].append(tag(series, 'items'))
-            lang_map[user_id].append(tag(series, 'contributions'))
-            lang_map[user_id].append(tag(series, 'followers'))
-            lang_map[user_id].append(tag(series, 'followees'))
+            lang_map[user_id].append(str(series['organization']))
+            lang_map[user_id].append(str(series['qiita_organization']))
         for i, series in df_langs.iterrows():
             user_id = int(series['user_id'])
             lang_map[user_id].append(str(series['name']))

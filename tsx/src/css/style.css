@@ -119,3 +119,13 @@
 }
 
 /* ---------------------------------------- */
+
+.searchForm .btnPanel {
+    display: flex;
+}
+
+.searchForm .btnPanel .checkbox {
+    padding: 0px 15px;
+}
+
+/* ---------------------------------------- */

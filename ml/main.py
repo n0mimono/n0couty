@@ -59,7 +59,11 @@ def similarity_users():
     else:
         queries = request.args.get('queries').split(' ')
     max_num = int(request.args.get('max'))
-    return ctrl.word_similarity_users_get(queries, max_num)
+    use_simple = (request.args.get('simple') == 'true')
+    if use_simple:
+        return ctrl.word_similarity_users_get_simple(queries, max_num)
+    else:
+        return ctrl.word_similarity_users_get(queries, max_num)
 
 
 if __name__ == "__main__":

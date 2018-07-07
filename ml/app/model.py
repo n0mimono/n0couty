@@ -14,6 +14,33 @@ class Db():
     def sql_table_all(self, table_name: str) -> str:
         return "select * from {table_name}".format(table_name=table_name)
 
+    def sql_table_where(self, table_name: str, col: str, items: list) -> str:
+        # todo: character encoding
+        cond = "false"
+        for item in items:
+            cond = cond + " or {col}='{item}'".format(col=col, item=item)
+
+        return "select * from {table_name} where {cond}".format(
+                table_name=table_name, cond=cond
+            )
+    
+    def sql_lang_counts(self, items: list) -> str:
+        cond = "false"
+        for item in items:
+            cond = cond + " or {col}='{item}'".format(col='name', item=item)
+        
+        f = "select {col}, count({col}) from {table_name} where {cond} group by {col} order by count({col}) asc"
+        return f.format(table_name='user_language_stats', col='user_id', cond=cond)
+
+    def sql_user_counts(self, items: list) -> str:
+        cond = "false"
+        for item in items:
+            for col in ['qiita_id', 'name', 'organization', 'qiita_organization']:
+                cond = cond + " or {col}='{item}'".format(col=col, item=item)
+        
+        f = "select {col}, count({col}) from {table_name} where {cond} group by {col} order by count({col}) asc"
+        return f.format(table_name='users', col='id', cond=cond)
+
 
 class WordCalculator():
     def __init__(self, model, uniques):

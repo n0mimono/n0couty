@@ -11,8 +11,8 @@ import {
     Navbar, Nav, NavItem,
     Grid, Row, Col,
     PageHeader,
-    Button, Form, FormGroup, FormControl,
-    ProgressBar,
+    Button, Form, FormGroup, FormControl, ControlLabel,
+    ProgressBar, Checkbox,
     ListGroup, ListGroupItem,
     Glyphicon, Badge, Label, ButtonGroup
 } from 'react-bootstrap'
@@ -683,28 +683,51 @@ export const StatsSummary: React.SFC<StatsSummaryProps> = (props) => {
 ///////////////////////////////////////////////////////////////////////
 
 interface SearchFormProps {
-    value: string
-    onChange: (q: string) => void
-    onClick: (q: string) => void
+    onClick: (q: any) => void
     isLoading: boolean
 }
 
-export const SearchForm: React.SFC<SearchFormProps> = (props) => {
-    let placeholder = "Railsで開発しています。\nRubyを使える人を探しています。"
-    return (
-        <Form horizontal>
+export class SearchForm extends React.Component<SearchFormProps> {
+    text: string = ""
+    useSimple: boolean = true
+
+    onChangeText(t: string) {
+        this.text = t
+    }
+    onChangeUseSimple(b: boolean) {
+        this.useSimple = b
+    }
+    getQuery() {
+        return {
+            doc: this.text,
+            simple: this.useSimple,
+        }
+    }
+
+    render() {
+        let props = this.props
+
+        let placeholder = "Railsでつくっています。\nRubyを使える人を探しています。"
+        return (
+            <Form horizontal className={styles.searchForm}>
             <FormGroup>
                 <Col xs={9}>
                     <FormControl componentClass="textarea" placeholder={placeholder}
                         multiple={true} rows={5}
-                        value={props.value} onChange={e => props.onChange((e.target as any).value)} />
+                        onChange={e => this.onChangeText((e.target as any).value)} />
                 </Col>
             </FormGroup>
             <FormGroup>
-                <Col xsOffset={0} xs={8}>
-                    <Button disabled={props.isLoading} onClick={_ => props.onClick(props.value)}>検索する</Button>
+                <Col xs={6} className={styles.btnPanel}>
+                    <Button disabled={props.isLoading}
+                        onClick={_ => props.onClick(this.getQuery())}>検索する</Button>
+                    <div className={styles.checkbox}>
+                        <Checkbox defaultChecked={this.useSimple}
+                            onClick={e => this.onChangeUseSimple(!this.useSimple)}>高速版</Checkbox>
+                    </div>
                 </Col>
             </FormGroup>
         </Form>
-    )
+        )
+    }
 }

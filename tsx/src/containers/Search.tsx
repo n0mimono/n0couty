@@ -31,8 +31,7 @@ class Component extends React.Component<Props> {
                     Request <small>要件</small>
                 </SubHeader>
                 <Block>
-                    <SearchForm isLoading={props.isLoading} onClick={q => this.props.getUserList(q)}
-                        value={props.formValue} onChange={props.onFormChange} />
+                    <SearchForm isLoading={props.isLoading} onClick={q => this.props.getUserList(q)} />
                 </Block>
                 <SubHeader>
                     Results <small>検索結果</small>
@@ -61,14 +60,14 @@ function mapDispatchToProps(dispatch: Dispatch<void>) {
         init: () => {
             dispatch(Search.actions.init())
         },
-        getUserList: (q: string) => {
+        getUserList: (q: Search.SearchQuery) => {
             // fetch
-            let query = 'max=40'
+            let query = 'max=20' + '&simple=' + q.simple
             fetch('/api/ml/word/similarity_users?' + query, {
                 method: 'POST',
                 credentials: "same-origin",
                 headers: { 'content-type': 'application/json' },
-                body: JSON.stringify({ doc: q }),
+                body: JSON.stringify({ doc: q.doc }),
             })
             .then(r => r.json())
             .then(r => {
@@ -99,9 +98,6 @@ function mapDispatchToProps(dispatch: Dispatch<void>) {
 
             // loading
             dispatch(Search.actions.updateLoading(true))
-        },
-        onFormChange: (q: string) => {
-            dispatch(Search.actions.updateFormValue(q))
         },
         checkStar: (check: Common.UserStarCheck) => {
             let query = 'id=' + check.userId + '&star=' + check.on
